@@ -1,3 +1,4 @@
+# This Python file uses the following encoding: utf-8
 """
 PyLMS: Python Wrapper for Logitech Media Server CLI
 (Telnet) Interface
@@ -21,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import telnetlib
 from pylms.player import Player
+import unicodedata   # for handling (badly) accented characters
     
 
 class Server(object):
@@ -95,6 +97,7 @@ class Server(object):
             else:
                 result = response[len(command_string_quoted)-1:]
         result = result.strip()
+        result = unicodedata.normalize('NFD', result).encode('ascii','ignore')
         return result
 
     def request_with_results(self, command_string, preserve_encoding=False):
